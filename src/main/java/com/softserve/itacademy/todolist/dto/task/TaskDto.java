@@ -1,4 +1,4 @@
-package com.softserve.itacademy.todolist.dto;
+package com.softserve.itacademy.todolist.dto.task;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

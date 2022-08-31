@@ -1,5 +1,6 @@
-package com.softserve.itacademy.todolist.dto;
+package com.softserve.itacademy.todolist.dto.task;
 
+import com.softserve.itacademy.todolist.dto.task.TaskDto;
 import com.softserve.itacademy.todolist.model.Priority;
 import com.softserve.itacademy.todolist.model.State;
 import com.softserve.itacademy.todolist.model.Task;
