@@ -11,4 +11,5 @@ public interface RoleService {
     Role update(Role role);
     void delete(long id);
     List<Role> getAll();
+    Role readByName(String name);
 }

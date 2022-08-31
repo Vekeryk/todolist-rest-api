@@ -51,4 +51,11 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> getAll() {
         return roleRepository.findAll();
     }
+
+    @Override
+    public Role readByName(String name) {
+        return roleRepository.findByName(name).orElseThrow(
+                () -> new EntityNotFoundException("Role with name " + name + " not found"));
+
+    }
 }
