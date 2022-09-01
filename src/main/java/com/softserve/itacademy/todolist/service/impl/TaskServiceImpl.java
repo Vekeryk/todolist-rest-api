@@ -3,29 +3,24 @@ package com.softserve.itacademy.todolist.service.impl;
 import com.softserve.itacademy.todolist.exception.NullEntityReferenceException;
 import com.softserve.itacademy.todolist.model.Task;
 import com.softserve.itacademy.todolist.repository.TaskRepository;
+import com.softserve.itacademy.todolist.service.StateService;
 import com.softserve.itacademy.todolist.service.TaskService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
-
-    private static final Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
-
-
     private final TaskRepository taskRepository;
-
-    public TaskServiceImpl(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
+    private final StateService stateService;
 
     @Override
     public Task create(Task task) {
         if (task != null) {
+            task.setState(stateService.getByName("NEW"));
             return taskRepository.save(task);
         }
         throw new NullEntityReferenceException("Task cannot be 'null'");
@@ -33,12 +28,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Task readById(long id) {
-
-        EntityNotFoundException exception = new EntityNotFoundException("Task with id " + id + " not found");
-        logger.error(exception.getMessage(), exception);
-
         return taskRepository.findById(id).orElseThrow(
-                () -> exception);
+                () -> new EntityNotFoundException("Task with id " + id + " not found"));
     }
 
     @Override
