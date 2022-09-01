@@ -14,10 +14,12 @@ import javax.validation.constraints.Pattern;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserCreateRequest {
 
+    @NotBlank
     @Pattern(regexp = "[A-Z][a-z]+",
             message = "Must start with a capital letter followed by one or more lowercase letters")
     String firstName;
 
+    @NotBlank
     @Pattern(regexp = "[A-Z][a-z]+",
             message = "Must start with a capital letter followed by one or more lowercase letters")
     String lastName;
