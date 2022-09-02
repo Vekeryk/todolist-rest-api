@@ -4,18 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Getter @Setter @NoArgsConstructor
 @Entity @Table(name = "todos")
 public class ToDo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_seq")
+    @SequenceGenerator(name = "todo_seq", initialValue = 10)
     private Long id;
 
     @NotBlank(message = "The 'title' cannot be empty")
@@ -23,6 +24,7 @@ public class ToDo {
     private String title;
 
     @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @ManyToOne
