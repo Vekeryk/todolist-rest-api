@@ -10,6 +10,6 @@ public interface ToDoService {
     ToDo update(ToDo todo);
     void delete(long id);
     List<ToDo> getAll();
-
     List<ToDo> getByUserId(long userId);
+    boolean isUserCollaborator(long todoId, long userId);
 }
