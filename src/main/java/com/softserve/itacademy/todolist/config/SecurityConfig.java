@@ -1,37 +1,37 @@
 package com.softserve.itacademy.todolist.config;
 
+import com.softserve.itacademy.todolist.security.JWTFilter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
-@EnableWebSecurity
+@RequiredArgsConstructor
+@EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    // todo: check https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
+public class SecurityConfig {
 
-    @Autowired
-    UserDetailsService userServiceImpl;
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userServiceImpl);
+    private final JWTFilter jwtFilter;
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint(restAuthenticationEntryPoint())
@@ -40,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .authenticationEntryPoint(restAuthenticationEntryPoint()) // Handles auth error
                 )
                 .csrf().disable()
+                .formLogin().disable()
                 .headers(h -> h
                         .frameOptions() // for Postman, the H2 console
                         .disable()
@@ -48,8 +49,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no session
                 )
                 .authorizeHttpRequests(a -> a
-                        .anyRequest().permitAll() // todo
-                );
+                        .anyRequest().permitAll()
+                )
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
