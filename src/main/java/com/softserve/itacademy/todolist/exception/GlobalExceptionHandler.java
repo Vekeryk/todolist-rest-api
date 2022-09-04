@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler { // consider extending ResponseEntityExceptionHandler
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -66,9 +66,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler { // 
         return ResponseEntity.internalServerError().body(ex.getMessage());
     }
 
-    @ExceptionHandler
-    public ResponseEntity<?> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
-        log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), ex.getClass(), ex.getMessage());
-        return ResponseEntity.internalServerError().body(ex.getMessage());
-    }
+//    @ExceptionHandler
+//    public ResponseEntity<?> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
+//        log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), ex.getClass(), ex.getMessage());
+//        return ResponseEntity.internalServerError().body(ex.getMessage());
+//    }
 }

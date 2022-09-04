@@ -45,10 +45,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<ToDo> myTodos;
 
-    @ManyToMany
-    @JoinTable(name = "todo_collaborator",
-            joinColumns = @JoinColumn(name = "collaborator_id"),
-            inverseJoinColumns = @JoinColumn(name = "todo_id"))
+    @ManyToMany(mappedBy = "collaborators")
     private List<ToDo> otherTodos;
 
 

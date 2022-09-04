@@ -38,7 +38,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userId, null, Collections.singletonList(userRole));
-                System.out.println(authenticationToken);
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } catch (Exception e) {
                 log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), e.getClass(), e.getMessage());
