@@ -32,6 +32,4 @@ public class UserUpdateRequest {
     @Pattern(regexp = ".*[a-z].*",
             message = "Must contain at least one lowercase letter")
     String password;
-
-    String role;
 }
