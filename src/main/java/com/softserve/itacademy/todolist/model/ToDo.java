@@ -15,8 +15,7 @@ import java.util.List;
 @Entity @Table(name = "todos")
 public class ToDo {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_seq")
-    @SequenceGenerator(name = "todo_seq", initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "The 'title' cannot be empty")
