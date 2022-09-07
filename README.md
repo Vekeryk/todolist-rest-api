@@ -19,7 +19,9 @@ This project uses:
 
 Resource list:
 * `/api/auth`
-* `/api/users`
+* `/api/roles`
+* `/api/states`
+* `/api/priorities`
 * `/api/users/{user-id}/todos`
-* `/api/users/{user-id}/todos/{todo-id}`
+* `/api/users/{user-id}/todos/{todo-id}/tasks`
 * `/api/users/{user-id}/todos/{todo-id}/collaborators`
