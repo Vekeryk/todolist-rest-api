@@ -4,6 +4,7 @@ import com.softserve.itacademy.todolist.security.JWTFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,11 +21,12 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
 @RequiredArgsConstructor
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JWTFilter jwtFilter;
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -37,19 +39,21 @@ public class SecurityConfig {
                         .authenticationEntryPoint(restAuthenticationEntryPoint())
                 )
                 .httpBasic(hb -> hb
-                        .authenticationEntryPoint(restAuthenticationEntryPoint()) // Handles auth error
+                        .authenticationEntryPoint(restAuthenticationEntryPoint())
                 )
                 .csrf().disable()
                 .formLogin().disable()
                 .headers(h -> h
-                        .frameOptions() // for Postman, the H2 console
+                        .frameOptions()
                         .disable()
                 )
                 .sessionManagement(sm -> sm
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // no session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(a -> a
-                        .anyRequest().permitAll()
+                        .antMatchers("/api/auth", "/api/users").permitAll()
+                        .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -65,8 +69,7 @@ public class SecurityConfig {
         return (request, response, authException) -> {
             log.warn("Authentication for '{} {}' failed with error: {}",
                     request.getMethod(), request.getRequestURL(), authException.getMessage());
-            response.sendError(
-                    UNAUTHORIZED.value(), authException.getMessage());
+            response.sendError(UNAUTHORIZED.value(), authException.getMessage());
         };
     }
 }
