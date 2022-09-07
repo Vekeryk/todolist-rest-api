@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Slf4j
 @Component
@@ -41,7 +41,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } catch (Exception e) {
                 log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), e.getClass(), e.getMessage());
-                response.sendError(BAD_REQUEST.value(), "Invalid token");
+                response.sendError(UNAUTHORIZED.value(), "Invalid token");
                 return;
             }
         }
