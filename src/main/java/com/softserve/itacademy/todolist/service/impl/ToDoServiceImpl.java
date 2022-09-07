@@ -7,7 +7,10 @@ import com.softserve.itacademy.todolist.repository.ToDoRepository;
 import com.softserve.itacademy.todolist.service.ToDoService;
 import com.softserve.itacademy.todolist.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -60,9 +63,30 @@ public class ToDoServiceImpl implements ToDoService {
 
     }
 
+    @Transactional
     @Override
-    public boolean isUserCollaborator(long todoId, long userId) {
-        User user = userService.readById(userId);
+    public void addCollaborator(ToDo toDo, User collaborator) {
+        if (toDo.getOwner().equals(collaborator)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User is owner, cannot be a collaborator");
+        }
+        if (toDo.getCollaborators().contains(collaborator)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User is already a collaborator");
+        }
+        toDo.getCollaborators().add(collaborator);
+    }
+
+    @Transactional
+    @Override
+    public void removeCollaborator(ToDo toDo, User collaborator) {
+        if (!toDo.getCollaborators().contains(collaborator)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User is not a collaborator");
+        }
+        toDo.getCollaborators().remove(collaborator);
+    }
+
+    @Override
+    public boolean isUserCollaborator(long todoId, long collaboratorId) {
+        User user = userService.readById(collaboratorId);
         return readById(todoId).getCollaborators().contains(user);
     }
 }
