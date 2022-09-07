@@ -2,29 +2,27 @@ package com.softserve.itacademy.todolist.dto.task;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.softserve.itacademy.todolist.model.Priority;
+import com.softserve.itacademy.todolist.model.State;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TaskUpdateRequest {
-    @NotNull
-    @NotBlank
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
+
+    @Size(min = 3)
+    @Pattern(regexp = "(.|\\s)*\\S(.|\\s)*")
     private String name;
 
-    @Column(name = "priority")
     @Enumerated(EnumType.STRING)
-    private String priority;
+    private Priority priority;
 
-    String state;
+    @Enumerated(EnumType.STRING)
+    private State state;
 }

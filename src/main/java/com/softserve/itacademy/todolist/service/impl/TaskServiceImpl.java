@@ -1,9 +1,9 @@
 package com.softserve.itacademy.todolist.service.impl;
 
 import com.softserve.itacademy.todolist.exception.NullEntityReferenceException;
+import com.softserve.itacademy.todolist.model.State;
 import com.softserve.itacademy.todolist.model.Task;
 import com.softserve.itacademy.todolist.repository.TaskRepository;
-import com.softserve.itacademy.todolist.service.StateService;
 import com.softserve.itacademy.todolist.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
-    private final StateService stateService;
 
     @Override
     public Task create(Task task) {
         if (task != null) {
-            task.setState(stateService.getByName("NEW"));
+            task.setState(State.NEW);
             return taskRepository.save(task);
         }
         throw new NullEntityReferenceException("Task cannot be 'null'");

@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Getter @Setter @NoArgsConstructor
 @Entity
@@ -16,22 +15,20 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "priority")
+    @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private Priority priority;
+
+    @Column(name = "state", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private State state;
 
     @ManyToOne
     @JoinColumn(name = "todo_id")
     private ToDo todo;
-
-    @ManyToOne
-    @JoinColumn(name = "state_id")
-    private State state;
 
     @Override
     public boolean equals(Object o) {

@@ -7,21 +7,21 @@ import com.softserve.itacademy.todolist.model.Priority;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TaskCreateRequest {
-    @Pattern(regexp = "[A-Z][a-z]+",
-            message = "Must start with a capital letter followed by one or more lowercase letters")
-    @Column(name = "name", nullable = false)
+    @NotBlank
+    @Size(min = 3)
     private String name;
 
-    @Column(name = "priority")
+    @NotNull
     @Enumerated(EnumType.STRING)
     private Priority priority;
 }
