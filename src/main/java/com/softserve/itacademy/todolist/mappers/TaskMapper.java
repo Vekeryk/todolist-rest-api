@@ -4,6 +4,7 @@ package com.softserve.itacademy.todolist.mappers;
 import com.softserve.itacademy.todolist.dto.task.TaskCreateRequest;
 import com.softserve.itacademy.todolist.dto.task.TaskResponse;
 import com.softserve.itacademy.todolist.dto.task.TaskUpdateRequest;
+import com.softserve.itacademy.todolist.model.State;
 import com.softserve.itacademy.todolist.model.Task;
 import com.softserve.itacademy.todolist.service.impl.StateServiceImpl;
 import org.mapstruct.Mapper;
@@ -23,4 +24,7 @@ public interface TaskMapper {
 
     void patchTaskModel(@MappingTarget Task task, TaskUpdateRequest taskUpdateRequest);
 
+    default String toString(State state) {
+        return state.getName();
+    }
 }
