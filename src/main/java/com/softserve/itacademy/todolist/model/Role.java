@@ -6,12 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
-import java.util.Objects;
 
 @Getter @Setter @NoArgsConstructor @ToString
 @Entity @Table(name = "roles")
@@ -39,6 +36,6 @@ public class Role implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return "ROLE_" + name;
+        return name;
     }
 }
