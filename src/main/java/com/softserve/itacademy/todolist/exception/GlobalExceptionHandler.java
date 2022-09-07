@@ -1,5 +1,6 @@
 package com.softserve.itacademy.todolist.exception;
 
+import com.softserve.itacademy.todolist.dto.error.SimpleErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,15 +61,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
-        log.error("Database error for '{} {}' failed with error: {} \n {}",
-                request.getMethod(), request.getRequestURL(), ex.getClass(), ex.getConstraintViolations());
-        return ResponseEntity.internalServerError().body(ex.getMessage());
+    public ResponseEntity<?> handleResponseStatusException(ResponseStatusException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(new SimpleErrorResponse(ex.getReason()));
     }
 
-//    @ExceptionHandler
-//    public ResponseEntity<?> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
-//        log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), ex.getClass(), ex.getMessage());
-//        return ResponseEntity.internalServerError().body(ex.getMessage());
-//    }
+    @ExceptionHandler
+    public ResponseEntity<?> handleRuntimeException(RuntimeException ex, HttpServletRequest request) {
+        log.error("Request for '{} {}' failed with error: {} \n {}", request.getMethod(), request.getRequestURL(), ex.getClass(), ex.getMessage());
+        return ResponseEntity.internalServerError().body(ex.getMessage());
+    }
 }
