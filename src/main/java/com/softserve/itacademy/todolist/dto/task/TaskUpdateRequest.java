@@ -1,23 +1,18 @@
 package com.softserve.itacademy.todolist.dto.task;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.softserve.itacademy.todolist.model.Priority;
 import com.softserve.itacademy.todolist.model.State;
+import com.softserve.itacademy.todolist.validator.constraint.Title;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TaskUpdateRequest {
-
-    @Size(min = 3)
-    @Pattern(regexp = "(.|\\s)*\\S(.|\\s)*")
+    @Title
     private String name;
 
     @Enumerated(EnumType.STRING)
