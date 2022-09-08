@@ -15,10 +15,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class TaskCreateRequest {
     @Title
-    @NotBlank
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Priority is required")
     @Enumerated(EnumType.STRING)
     private Priority priority;
 }

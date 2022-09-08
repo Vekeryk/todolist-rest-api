@@ -13,10 +13,13 @@ import javax.validation.constraints.Email;
 public class UserUpdateRequest {
     @Name
     String firstName;
+
     @Name
     String lastName;
-    @Email
+
+    @Email(message = "Email is invalid")
     String email;
+
     @Password
     String password;
 }

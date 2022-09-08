@@ -8,8 +8,9 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 public class AuthRequest {
-    @NotBlank
+    @NotBlank(message = "Email cannot be empty")
     String email;
-    @NotBlank
+
+    @NotBlank(message = "Password cannot be empty")
     String password;
 }

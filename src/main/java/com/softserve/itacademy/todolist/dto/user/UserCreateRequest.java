@@ -12,18 +12,18 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserCreateRequest {
     @Name
-    @NotBlank
+    @NotBlank(message = "First name cannot be empty")
     String firstName;
 
     @Name
-    @NotBlank
+    @NotBlank(message = "Last name cannot be empty")
     String lastName;
 
-    @Email
-    @NotBlank
+    @Email(message = "Email is invalid")
+    @NotBlank(message = "Email cannot be empty")
     String email;
 
     @Password
-    @NotBlank
+    @NotBlank(message = "Password cannot be empty")
     String password;
 }

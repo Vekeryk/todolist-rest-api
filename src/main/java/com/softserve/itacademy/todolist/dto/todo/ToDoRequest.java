@@ -8,6 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 public class ToDoRequest {
-    @NotBlank(message = "The 'title' cannot be empty")
+    @NotBlank(message = "Title cannot be empty")
     String title;
 }
