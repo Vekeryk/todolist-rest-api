@@ -12,7 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.util.List;
 
 @DataJpaTest
-class ToDoRepositoryTest {
+class ToDoRepositoryTest extends RepositoryTest {
 
     @Autowired
     private ToDoRepository toDoRepository;
@@ -23,36 +23,22 @@ class ToDoRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        user.setFirstName("John");
-        user.setLastName("Doe");
-        user.setEmail("doe@mail.com");
-        user.setPassword("password");
+        user = createUser("John", "Doe", "doe@mail.com", "password");
         entityManager.persist(user);
 
-        collaborator = new User();
-        collaborator.setFirstName("Walter");
-        collaborator.setLastName("White");
-        collaborator.setEmail("white@mail.com");
-        collaborator.setPassword("password");
+        collaborator = createUser("Walter", "White", "white@mail.com", "password");
         entityManager.persist(collaborator);
     }
 
     @Test
     void shouldGetAllUserToDosIncludeCollaborateOnes() {
-        ToDo toDo = new ToDo();
-        toDo.setTitle("User ToDo");
-        toDo.setOwner(user);
+        ToDo toDo = createToDo("User ToDo", user);
         entityManager.persist(toDo);
-
-        ToDo toDo2 = new ToDo();
-        toDo2.setTitle("Collaborator ToDo");
-        toDo2.setOwner(collaborator);
+        ToDo toDo2 = createToDo("Collaborator ToDo", collaborator);
         entityManager.persist(toDo2);
 
         toDo.getCollaborators().add(collaborator);
         List<ToDo> expected = List.of(toDo, toDo2);
-
         // when
         List<ToDo> actual = toDoRepository.getAllToDosOfUser(collaborator.getId());
 
