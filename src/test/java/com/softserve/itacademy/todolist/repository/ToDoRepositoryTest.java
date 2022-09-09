@@ -39,7 +39,7 @@ class ToDoRepositoryTest {
     }
 
     @Test
-    void checkGetAllUserToDosIncludeCollaborateOnes() {
+    void shouldGetAllUserToDosIncludeCollaborateOnes() {
         ToDo toDo = new ToDo();
         toDo.setTitle("User ToDo");
         toDo.setOwner(user);
