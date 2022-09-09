@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter @Setter @NoArgsConstructor
@@ -27,7 +28,7 @@ public class ToDo {
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @OneToMany(mappedBy = "todo", cascade = CascadeType.REMOVE)
@@ -37,7 +38,7 @@ public class ToDo {
     @JoinTable(name = "todo_collaborator",
             joinColumns = @JoinColumn(name = "todo_id"),
             inverseJoinColumns = @JoinColumn(name = "collaborator_id"))
-    private List<User> collaborators;
+    private List<User> collaborators = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
