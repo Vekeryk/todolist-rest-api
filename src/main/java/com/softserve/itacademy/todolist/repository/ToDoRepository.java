@@ -17,5 +17,5 @@ public interface ToDoRepository extends JpaRepository<ToDo, Long> {
             inner join todo_collaborator
             on id = todo_id and collaborator_id = ?1
             """, nativeQuery = true)
-    List<ToDo> getByUserId(long userId);
+    List<ToDo> getAllToDosOfUser(long userId);
 }

@@ -58,7 +58,7 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public List<ToDo> getByUserId(long userId) {
-        return todoRepository.getByUserId(userId);
+        return todoRepository.getAllToDosOfUser(userId);
 
 
     }
