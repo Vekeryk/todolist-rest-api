@@ -6,11 +6,14 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +28,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         String regex = "([a-z])([A-Z]+)";
+        String regex1 = "([a-z])([A-Z]+)";
+        String regex2 = "([a-z])([A-Z]+)";
         String replacement = "$1_$2";
         Map<String, List<String>> errors = ex.getBindingResult()
                 .getFieldErrors()
@@ -44,6 +49,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new SimpleErrorResponse<>(ex.getMessage()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new SimpleErrorResponse<>(ex.getMessage()));
     }
 
     @ExceptionHandler
